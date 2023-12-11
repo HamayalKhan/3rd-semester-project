@@ -18,7 +18,7 @@ namespace API.Model
         public string Remarks { get; set; }
 
         public Student Student { get; set; } // Navigation property for Student
-        public Competition Competition { get; set; } // Navigation property for Competition
+        /*public Competition Competition { get; set; }*/ // Navigation property for Competition
     }
 
 }

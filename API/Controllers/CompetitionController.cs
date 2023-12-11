@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Auth.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("Api/[controller]")]
-    public class AuthController : Controller
+    public class CompetitionController : Controller
     {
         private readonly ApiDbContext _context;
-        public AuthController(ApiDbContext context)
+        public CompetitionController(ApiDbContext context)
         {
             _context = context;
         }
@@ -17,38 +17,38 @@ namespace Auth.Controllers
         //Get Protocol for all
 
         [HttpGet]
-        public IEnumerable<User> GetData()
+        public IEnumerable<Competition> GetData()
         {
-            return _context.Users.ToList();
+            return _context.Competition.ToList();
         }
         //Get Protocol Id based
         [HttpGet("id")]
         public IActionResult getdata(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
-            if (user == null)
+            var Competition = _context.Competition.FirstOrDefault(u => u.CompetitionId == id);
+            if (Competition == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(Competition);
 
 
         }
 
         //post protocol
         [HttpPost]
-        public void postdata([FromBody] User User)
+        public void postdata([FromBody] Competition Competition)
         {
-            _context.Users.Add(User);
+            _context.Competition.Add(Competition);
             _context.SaveChanges();
         }
 
         //update protocol
         [HttpPut("{id}")]
-        public void updatedata(int id, [FromBody] User UpdatedUser)
+        public void updatedata(int id, [FromBody] Competition UpdatedCompetition)
         {
-            _context.Entry(UpdatedUser).State = EntityState.Modified;
+            _context.Entry(UpdatedCompetition).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
@@ -57,18 +57,13 @@ namespace Auth.Controllers
         public void deletedata(int id)
         {
 
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+            var Competition = _context.Competition.FirstOrDefault(u => u.CompetitionId == id);
 
-            if (user == null)
-            {
-                NotFound();
-            }
 
-            _context.Users.Remove(user);
+            _context.Competition.Remove(Competition);
             _context.SaveChanges();
 
             Ok();
         }
-
     }
 }

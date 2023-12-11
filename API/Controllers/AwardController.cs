@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Auth.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("Api/[controller]")]
-    public class AuthController : Controller
+    public class AwardController : Controller
     {
         private readonly ApiDbContext _context;
-        public AuthController(ApiDbContext context)
+        public AwardController(ApiDbContext context)
         {
             _context = context;
         }
@@ -17,38 +17,38 @@ namespace Auth.Controllers
         //Get Protocol for all
 
         [HttpGet]
-        public IEnumerable<User> GetData()
+        public IEnumerable<Award> GetData()
         {
-            return _context.Users.ToList();
+            return _context.Award.ToList();
         }
         //Get Protocol Id based
         [HttpGet("id")]
         public IActionResult getdata(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
-            if (user == null)
+            var Award = _context.Award.FirstOrDefault(u => u.AwardId == id);
+            if (Award == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(Award);
 
 
         }
 
         //post protocol
         [HttpPost]
-        public void postdata([FromBody] User User)
+        public void postdata([FromBody] Award Award)
         {
-            _context.Users.Add(User);
+            _context.Award.Add(Award);
             _context.SaveChanges();
         }
 
         //update protocol
         [HttpPut("{id}")]
-        public void updatedata(int id, [FromBody] User UpdatedUser)
+        public void updatedata(int id, [FromBody] Award UpdatedAward)
         {
-            _context.Entry(UpdatedUser).State = EntityState.Modified;
+            _context.Entry(UpdatedAward).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
@@ -57,18 +57,13 @@ namespace Auth.Controllers
         public void deletedata(int id)
         {
 
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+            var award = _context.Award.FirstOrDefault(u => u.AwardId == id);
 
-            if (user == null)
-            {
-                NotFound();
-            }
 
-            _context.Users.Remove(user);
+            _context.Award.Remove(award);
             _context.SaveChanges();
 
             Ok();
         }
-
     }
 }

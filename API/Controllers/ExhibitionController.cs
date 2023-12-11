@@ -1,15 +1,16 @@
 ﻿using API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace Auth.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("Api/[controller]")]
-    public class AuthController : Controller
+    public class ExhibitionController : Controller
     {
         private readonly ApiDbContext _context;
-        public AuthController(ApiDbContext context)
+        public ExhibitionController(ApiDbContext context)
         {
             _context = context;
         }
@@ -17,38 +18,38 @@ namespace Auth.Controllers
         //Get Protocol for all
 
         [HttpGet]
-        public IEnumerable<User> GetData()
+        public IEnumerable<Exhibition> GetData()
         {
-            return _context.Users.ToList();
+            return _context.Exhibition.ToList();
         }
         //Get Protocol Id based
         [HttpGet("id")]
         public IActionResult getdata(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
-            if (user == null)
+            var Exhibition = _context.Exhibition.FirstOrDefault(u => u.ExhibitionId == id);
+            if (Exhibition == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(Exhibition);
 
 
         }
 
         //post protocol
         [HttpPost]
-        public void postdata([FromBody] User User)
+        public void postdata([FromBody] Exhibition Exhibition)
         {
-            _context.Users.Add(User);
+            _context.Exhibition.Add(Exhibition);
             _context.SaveChanges();
         }
 
         //update protocol
         [HttpPut("{id}")]
-        public void updatedata(int id, [FromBody] User UpdatedUser)
+        public void updatedata(int id, [FromBody] Exhibition UpdatedExhibition)
         {
-            _context.Entry(UpdatedUser).State = EntityState.Modified;
+            _context.Entry(UpdatedExhibition).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
@@ -57,18 +58,13 @@ namespace Auth.Controllers
         public void deletedata(int id)
         {
 
-            var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+            var Exhibition = _context.Exhibition.FirstOrDefault(u => u.ExhibitionId == id);
 
-            if (user == null)
-            {
-                NotFound();
-            }
 
-            _context.Users.Remove(user);
+            _context.Exhibition.Remove(Exhibition);
             _context.SaveChanges();
 
             Ok();
         }
-
     }
 }
